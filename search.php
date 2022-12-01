@@ -19,20 +19,11 @@ function getMovies($searchTerm){
     
     //Call the Movie DB API
     $url = "search/movie?api_key=" . TMDBapiKey . "&query=" . $searchTerm;
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, TMDBUrl . $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json'
-    ));
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $ch = curlSetup($url);
     $results = curl_exec($ch);
-
     curl_close($ch);
-    //die(var_dump($results));
-    echo $results;
 
+    echo $results;
 }
 
 function getMovieDetails($id){
@@ -41,20 +32,29 @@ function getMovieDetails($id){
         
     //Call the Movie DB API
     $url = "movie/". $id ."?api_key=" . TMDBapiKey;
-    
+    $ch = curlSetup($url);
+    $results = curl_exec($ch);
+    curl_close($ch);
+
+    echo $results;
+}
+
+function curlSetup($url){
     $ch = curl_init();
+    
     curl_setopt($ch, CURLOPT_URL, TMDBUrl . $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'Content-Type: application/json'
     ));
+    //no SSL cert on localhost
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    $results = curl_exec($ch);
+        
+    if(curl_errno($ch)){
+        echo 'Request Error:' . curl_error($ch);
+    }
     
-    curl_close($ch);
-    //die(var_dump($results));
-    echo $results;
-    
+    return $ch;
 }
 
 //TODO implement DB

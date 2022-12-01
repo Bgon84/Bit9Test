@@ -4,7 +4,7 @@ $( document ).ready(function() {
 	$('#noResultsDiv').css('display', 'none');
 	$('#detailsDiv').css('display', 'none');
 	
-	// prevent Enter from doing anythign since we have an onClick event on the input
+	// prevent Enter from doing anything because of onClick on the submit button
 	$("body").keypress(function(event) {
 	    if (event.which === 13) {
 			return false;
@@ -63,7 +63,7 @@ function getMovieDetails(id){
 	$.ajax({
   		method: "GET",
   		url: "search.php",
-  		data: { id: id, method: "details"}
+  		data: {id: id, method: "details"}
 	}).done(function(response) {
 		let results = JSON.parse(response);
 		let genreList = "";
@@ -81,6 +81,6 @@ function getMovieDetails(id){
 		}
 			
 		$('#detailsTable tbody').append('<tr><td><img src="https://image.tmdb.org/t/p/w300/' + results.poster_path 
-		+ '"/></td><td><p>' + results.overview + '</p></td><td><p>' + genreList + '</p></td></tr>');
+		+ '"/></td><td>' + results.overview + '</td><td>' + genreList + '</td></tr>');
 	});
 }
